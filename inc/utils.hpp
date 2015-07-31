@@ -1,9 +1,9 @@
 #ifndef __UTILS_HPP__
-#ifdef __UTILS_HPP__
+#define __UTILS_HPP__
 
 #include "thread.hpp"
 
-class SP_ArrayList {
+class ArrayList {
   public:
     static const int LAST_INDEX;
 
@@ -19,7 +19,7 @@ class SP_ArrayList {
 
   private:
     ArrayList( SP_ArrayList & );
-    SP_ArrayList & operator=( SP_ArrayList & );
+    ArrayList & operator=( SP_ArrayList & );
 
     int mMaxCount;
     int mCount;
