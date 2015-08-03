@@ -1,19 +1,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
-
-#include "porting.hpp"
+#include <pthread.h>
+#include <syslog.h>
 
 #include "threadpool.hpp"
 
 typedef struct thread
 {
-  pthread_t mld;
-  pthrad_mutex_t mMutex;
+  pthread_t mId;
+  pthread_mutex_t mMutex;
   pthread_cond_t mCond;
   ThreadPool::DispatchFunc_t mFunc;
   void * mArg;
-  ThreadPool * mParent;  
+  ThreadPool * mParent;
 } thread_t;
 
 ThreadPool :: ThreadPool(int maxThreads, const char *tag)
@@ -21,10 +21,10 @@ ThreadPool :: ThreadPool(int maxThreads, const char *tag)
   if( maxThreads <= 0)
     maxThreads = 2;
 
-  pthread_mutex_init( &mMainMutex, NULL);
-  pthread_cond_init( &mIdleCond, NULL );
-  pthread_cond_init( &mFullCond, NULL );
-  pthread_cond_init( &mEmptyCond, NULL ); 
+  pthread_mutex_init(&mMainMutex, NULL);
+  pthread_cond_init(&mIdleCond, NULL);
+  pthread_cond_init(&mFullCond, NULL);
+  pthread_cond_init(&mEmptyCond, NULL); 
 
   mMaxThreads = maxThreads;
   mIndex = 0;
@@ -41,10 +41,10 @@ ThreadPool :: ThreadPool(int maxThreads, const char *tag)
 
 ThreadPool :: ~ThreadPool()
 {
-  pthread_mutex_lock( &mMainMutex );
+  pthread_mutex_lock(&mMainMutex);
 
   if( mIndex < mTotal ) {
-    syslog( LOG_NOTICE, "[tp@%s] waiting for %d thread(s) to finish\n", mTag, mTotal - mIndex );
+    printf("[tp@%s] waiting for %d thread(s) to finish\n", mTag, mTotal - mIndex);
     pthread_cond_wait( &mFullCond, &mMainMutex );
   }
 
@@ -52,40 +52,38 @@ ThreadPool :: ~ThreadPool()
 
   int i = 0;
 
-  for( i = 0; i < mIndex; i++ ) {
+  for(i = 0; i < mIndex; i++) {
     thread_t * thread = mThreadList[i];
     pthread_mutex_lock(&thread->mMutex);
     pthread_cond_signal(&thread->mCond) ;
     pthread_mutex_unlock (&thread->mMutex);
   }
 
-  if( mTotal > 0 ) {
-    syslog( LOG_NOTICE, "[tp@%s] waiting for %d thread(s) to exit\n", mTag, mTotal );
-    pthread_cond_wait( &mEmptyCond, &mMainMutex );
+  if(mTotal > 0) {
+    printf("[tp@%s] waiting for %d thread(s) to exit\n", mTag, mTotal);
+    pthread_cond_wait(&mEmptyCond, &mMainMutex);
   }
 
-  syslog( LOG_NOTICE, "[tp@%s] destroy %d thread structure(s)\n", mTag, mIndex );
-  for( i = 0; i < mIndex; i++ ) {
-  thread_t * thread = mThreadList[i];
-  pthread_mutex_destroy(&thread->mMutex);
-  pthread_cond_destroy(&thread->mCond);
-  free(thread);
-  mThreadList[i] = NULL;
+  printf("[tp@%s] destroy %d thread structure(s)\n", mTag, mIndex);
+  for(i = 0; i < mIndex; i++) {
+    thread_t * thread = mThreadList[i];
+    pthread_mutex_destroy(&thread->mMutex);
+    pthread_cond_destroy(&thread->mCond);
+    free(thread);
+    mThreadList[i] = NULL;
 }
 
-  pthread_mutex_unlock( &mMainMutex );
+  pthread_mutex_unlock(&mMainMutex);
 
   mIndex = 0;
 
-  pthread_mutex_destroy( &mMainMutex );
-  pthread_cond_destroy( &mIdleCond );
-  pthread_cond_destroy( &mFullCond );
-  pthread_cond_destroy( &mEmptyCond );
-
-  free( mThreadList );
+  pthread_mutex_destroy(&mMainMutex);
+  pthread_cond_destroy(&mIdleCond);
+  pthread_cond_destroy(&mFullCond);
+  pthread_cond_destroy(&mEmptyCond);
+  free(mThreadList);
   mThreadList = NULL;
-
-  free( mTag );
+  
   mTag = NULL;
 }
 
@@ -111,14 +109,14 @@ int ThreadPool :: dispatch(DispatchFunc_t dispatchFunc, void *arg)
       thread->mParent = this;
   
       pthread_attr_init(&attr);
-      pthread_attr_setdetachstate(&attr, SP_THREAD_CREATE_DETACHED);
+      pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
   
       if( 0 == pthread_create(&(thread->mId), &attr, wrapperFunc, thread)) {
           mTotal++;
-          syslog( LOG_NOTICE, "[tp@%s] create thread#%ld\n", mTag, thread->mId );
+          printf("[tp@%s] create thread#%ld\n", mTag, thread->mId );
       } else {
           ret = -1;
-          syslog( LOG_WARNING, "[tp@%s] cannot create thread\n", mTag );
+          printf("[tp@%s] cannot create thread\n", mTag);
           pthread_mutex_destroy(&thread->mMutex);
           pthread_cond_destroy(&thread->mCond);
           free(thread);
@@ -144,27 +142,27 @@ int ThreadPool :: dispatch(DispatchFunc_t dispatchFunc, void *arg)
 
 }
 
-thread_result_t SP_THREAD_CALL ThreadPool :: wrapperFunc( void * arg )
+thread_result_t THREAD_CALL ThreadPool :: wrapperFunc(void * arg)
 {
   thread_t * thread = (thread_t *)arg;
 
   for( ; 0 == thread->mParent->mIsShutdown; ) {
     thread->mFunc( thread->mArg );
 
-  if( 0 != thread->mParent->mIsShutdown ) break;
+  if(0 != thread->mParent->mIsShutdown) break;
 
   pthread_mutex_lock(&thread->mMutex);
   if( 0 == thread->mParent->saveThread(thread)) {
     pthread_cond_wait(&thread->mCond, &thread->mMutex);
-    phread_mutex_unlock(&thread->mMutex);
+    pthread_mutex_unlock(&thread->mMutex);
   } 
   else 
   {
     pthread_mutex_unlock(&thread->mMutex);
-    pthread_cond_destroy( &thread->mCond );
-    pthread_mutex_destroy( &thread->mMutex );
+    pthread_cond_destroy(&thread->mCond);
+    pthread_mutex_destroy(&thread->mMutex);
 
-    free( thread );
+    free(thread);
     thread = NULL;
     break;
     }

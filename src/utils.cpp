@@ -16,7 +16,7 @@ ArrayList :: ArrayList( int initCount )
 
 ArrayList :: ~ArrayList()
 {
-  free( mFirst );
+  free(mFirst);
   mFirst = NULL;
 }
 

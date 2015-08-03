@@ -1,14 +1,14 @@
 #ifndef __THREADPOOL_HPP__
 #define __THREADPOOL_HPP__
 
-#include "pthread.hpp"
+#include "thread.hpp"
 
 typedef struct thread thread_t;
 
 class ThreadPool
 {
    public:
-      typedef void ( * DispatchFunc_t )( void * );
+      typedef void (* DispatchFunc_t)(void *);
       ThreadPool(int maxThreads, const char *tag = 0);
       ~ThreadPool();
 
@@ -30,8 +30,8 @@ class ThreadPool
 
      thread_t ** mThreadList;
 
-     static thread_result_t SP_THREAD_CALL wrapperFunc( void * );
-     int saveThread( thread_t * thread );
+     static thread_result_t THREAD_CALL wrapperFunc(void *);
+     int saveThread(thread_t * thread);
 
 };
 
