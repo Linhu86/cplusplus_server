@@ -2,7 +2,6 @@
 #define __IOCHANNEL_HPP__
 
 class Session;
-
 class Buffer;
 
 typedef struct evbuffer evbuffer_t;
@@ -12,12 +11,9 @@ struct iovec;
 class IOChannel
 {
   public:
-    vitrual ~IOChannel();
-
+    virtual ~IOChannel();
     virtual int init( int fd );
-
     virtual int receive( Session *session );
-
     virtual int transmit( Session *session );
 
   protected:
@@ -31,7 +27,6 @@ class IOChannelFactory
   public:
     IOChannelFactory();
     ~IOChannelFactory();
-
     virtual int init( int fd );
     virtual int receive( Session * session );
 

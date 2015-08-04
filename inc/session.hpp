@@ -88,6 +88,33 @@ private:
 
 };
 
+typedef struct tag_SessionEntry SessionEntry_t;
+
+class SessionManager {
+  public:
+    SessionManager();
+    ~SessionManager();
+
+    int getCount();
+    void put(uint32_t key, uint16_t seq, SP_Session * session);
+    Session * get(uint32_t key, uint16_t * seq);
+    Session * remove(uint32_t key, uint16_t seq);
+
+    int getFreeCount();
+    // > 0 : OK, 0 : out of memory
+    uint32_t allocKey( uint16_t * seq );
+
+  private:
+    enum { eColPerRow = 1024 };
+    enum { eRowNum = 64*16};
+  
+    int mCount;
+    SessionEntry_t * mArray[ eRowNum ];
+
+    int mFreeCount;
+    uint16_t mFreeList;
+};
+
 
 #endif
 

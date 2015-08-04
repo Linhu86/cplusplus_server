@@ -12,7 +12,7 @@ Buffer :: Buffer()
   mBuffer = evbuffer_new();
 }
 
-SP_Buffer :: ~SP_Buffer()
+Buffer :: ~Buffer()
 {
   evbuffer_free( mBuffer );
   mBuffer = NULL;

@@ -30,19 +30,16 @@ class SidList
     ~SP_SidList();
 
     void reset();
-
     int getCount() const;
     void add(Sid_t sid);
     Sid_t get(int index) const;
     Sid_t take(int index);
-
     int find(Sid_t sid) const;
 
   private:
     SidList(SidList &);
     SidList & operator=(SidList &);
     ArrayList * mList;
-
 };
 
 
@@ -53,34 +50,23 @@ class Message
     ~Message();
 
     void reset();
-
     SidList * getToList();
-
     size_t getTotalSize();
-
     Buffer * getMsg();
-
     MsgBlockList * getFollowBlockList();
-
     SidList * getSuccess();
-
     SidList * getFailure();
-
-    void setCompletionKey( int completionKey );
-
+    void setCompletionKey(int completionKey);
     int getCompletionKey();
 
   private:
-    Message( SP_Message & );
-    Message & operator=( SP_Message & );
-
+    Message(SP_Message &);
+    Message & operator=(SP_Message &);
     Buffer * mMsg;
     MsgBlockList * mFollowBlockList;
-
     SidList * mToList;
     SidList * mSuccess;
     SidList * mFailure;
-
     int mCompletionKey;    
 
 };
@@ -92,21 +78,17 @@ class Response {
 
     Sid_t getFromSid() const;
     Message * getReply();
-
     void addMessage(Message * msg);
     Message * peekMessage();
     Message * takeMessage();
-
     SidList * getToCloseList();
 
 private:
     Response(Response &);
     Response & operator=(Response &);
-
     Sid_t mFromSid;
     Message * mReply;
     SidList * mToCloseList;
-
     ArrayList * mList;
 };
 
