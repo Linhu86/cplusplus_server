@@ -67,7 +67,81 @@ MsgBlock *MsgBlockList :: takeItem(int index)
 }
 
 
+class BufferMsgBlock :: BufferMsgBlock()
+{
+  mBuffer = new Buffer();
+  mToBeOwner = 1;
+}
 
+BufferMsgBlock :: BufferMsgBlock(Buffer * buffer, int toBeOwner)
+{
+  mBuffer = buffer;
+  mToBeOwner = toBeOwner;
+}
+
+BufferMsgBlock :: ~SP_BufferMsgBlock()
+{
+  if( mToBeOwner ) delete mBuffer;
+    mBuffer = NULL;
+}
+
+const void * BufferMsgBlock :: getData() const
+{
+  return mBuffer->getBuffer();
+}
+
+size_t BufferMsgBlock :: getSize() const
+{
+  return mBuffer->getSize();
+}
+
+int BufferMsgBlock :: append( const void * buffer, size_t len )
+{
+  return mBuffer->append( buffer, len );
+}
+
+SimpleMsgBlock :: SimpleMsgBlock()
+{
+  mData = NULL;
+  mSize = 0;
+  mToBeOwner = 0;
+}
+
+SimpleMsgBlock :: SimpleMsgBlock( void * data, size_t size, int toBeOwner )
+{
+  mData = data;
+  mSize = size;
+  mToBeOwner = toBeOwner;
+}
+
+SimpleMsgBlock :: ~SimpleMsgBlock()
+{
+  if( mToBeOwner && NULL != mData ) {
+    free( mData );
+    mData = NULL;
+  }
+}
+
+const void * SimpleMsgBlock :: getData() const
+{
+  return mData;
+}
+
+size_t SimpleMsgBlock :: getSize() const
+{
+  return mSize;
+}
+
+void SimpleMsgBlock :: setData( void * data, size_t size, int toBeOwner )
+{
+  if( mToBeOwner && NULL != mData ) {
+    free( mData );
+  }
+
+  mData = data;
+  mSize = size;
+  mToBeOwner = toBeOwner;
+}
 
 
 
