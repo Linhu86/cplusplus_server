@@ -44,7 +44,7 @@ private:
 
   int start();
 
-  static sp_thread_result_t SP_THREAD_CALL eventLoop( void * arg );
+  static thread_result_t THREAD_CALL eventLoop( void * arg );
 
   static void onPush( void * queueData, void * arg );
 
