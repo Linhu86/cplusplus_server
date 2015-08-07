@@ -23,7 +23,7 @@ SidList :: ~SidList()
 void SP_SidList :: reset()
 {
   for( ; mList->getCount() > 0; ) {
-    free((void*)mList->takeItem(SP_ArrayList::LAST_INDEX));
+    free((void*)mList->takeItem(ArrayList::LAST_INDEX));
   }
 }
 

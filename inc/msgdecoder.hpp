@@ -6,7 +6,7 @@ class Buffer;
 class MsgDecoder{
   public:
     virtual ~MsgDecoder();
-    enum { eOK, eMoreData };
+    enum {eOK, eMoreData};
     virtual int decode(Buffer *inBuffer) = 0;
 };
 
@@ -83,7 +83,6 @@ class DotTermChunkMsgDecoder : public MsgDecoder
   private:
     ArrayList *mList;
 };
-
 
 #endif
 

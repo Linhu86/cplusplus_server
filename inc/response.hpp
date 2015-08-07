@@ -27,7 +27,7 @@ class SidList
 {
   public:
     SidList();
-    ~SP_SidList();
+    ~SidList();
 
     void reset();
     int getCount() const;
@@ -73,8 +73,8 @@ class Message
 
 class Response {
   public:
-    Response(SP_Sid_t fromSid);
-    Response();
+    Response(Sid_t fromSid);
+    ~Response();
 
     Sid_t getFromSid() const;
     Message * getReply();
