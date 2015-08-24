@@ -44,23 +44,16 @@ private:
 
   int start();
 
-  static thread_result_t THREAD_CALL eventLoop( void * arg );
+  static thread_result_t THREAD_CALL eventLoop(void * arg);
 
-  static void onPush( void * queueData, void * arg );
+  static void onPush(void * queueData, void * arg);
 
-  static void outputCompleted( void * arg );
+  static void outputCompleted(void * arg);
 
-  static void onTimer( int, short, void * arg );
-  static void timer( void * arg );
-
+  static void onTimer(int, short, void * arg);
+  
+  static void timer(void * arg);
 };
-
-
-};
-
-
-
-
 
 #endif
 

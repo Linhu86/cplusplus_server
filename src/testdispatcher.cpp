@@ -30,31 +30,29 @@ class EchoHandler : public Handler {
     // return -1 : terminate session, 0 : continue
     virtual int start(Request * request, Response * response) {
       request->setMsgDecoder(new LineMsgDecoder());
-      response->getReply()->getMsg()->append(
-      "Welcome to line echo dispatcher, enter 'quit' to quit.\r\n" );
-
+      response->getReply()->getMsg()->append("Welcome to line echo dispatcher, enter 'quit' to quit.\r\n");
       return 0;
     }
 
     // return -1 : terminate session, 0 : continue
     virtual int handle(Request * request, Response * response) {
-    LineMsgDecoder * decoder = (LineMsgDecoder*)request->getMsgDecoder();
+      LineMsgDecoder * decoder = (LineMsgDecoder*)request->getMsgDecoder();
 
-    if(0 != strcasecmp((char*)decoder->getMsg(), "quit")) {
-      response->getReply()->getMsg()->append((char*)decoder->getMsg());
-      response->getReply()->getMsg()->append("\r\n");
-      return 0;
-    } else {
-      response->getReply()->getMsg()->append("Byebye\r\n");
-      return -1;
+      if(0 != strcasecmp((char*)decoder->getMsg(), "quit")) {
+        response->getReply()->getMsg()->append((char*)decoder->getMsg());
+        response->getReply()->getMsg()->append("\r\n");
+        return 0;
+      } else {
+        response->getReply()->getMsg()->append("Byebye\r\n");
+        return -1;
+      }
     }
-  }
 
-  virtual void error(Response * response) {}
+    virtual void error(Response * response) {}
 
-  virtual void timeout(Response * response) {}
+    virtual void timeout(Response * response) {}
 
-  virtual void close() {}
+    virtual void close() {}
 };
 
 class EchoTimerHandler : public TimerHandler {
@@ -80,7 +78,7 @@ class EchoTimerHandler : public TimerHandler {
   }
 
   private:
-    int mCount;
+  int mCount;
 };
 
 int main(int argc, char * argv[])
@@ -128,11 +126,11 @@ int main(int argc, char * argv[])
 
       if(fd > 0) {
         if(dispatcher.getSessionCount() >= maxConnections
-          || dispatcher.getReqQueueLength() >= reqQueueSize ) {
-          write(fd, refusedMsg, strlen( refusedMsg ) );
+          || dispatcher.getReqQueueLength() >= reqQueueSize) {
+          write(fd, refusedMsg, strlen(refusedMsg));
           close(fd);
         } else {
-          dispatcher.push( fd, new EchoHandler() );
+          dispatcher.push(fd, new EchoHandler());
         }
       } else {
          break;

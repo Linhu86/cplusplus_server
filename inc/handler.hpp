@@ -8,10 +8,10 @@ class Handler
 {
   public:
     virtual ~Handler();
-    virtual int start(Server_Request *request, Server_Response *response) = 0;
-    virtual int handle(Server_Request *request, Server_Response *response) = 0;
-    virtual void error(Server_Response *response) = 0;
-    virtual void timeout(Server_Response *response) = 0;
+    virtual int start(Request *request, Response *response) = 0;
+    virtual int handle(Request *request, Response *response) = 0;
+    virtual void error(Response *response) = 0;
+    virtual void timeout(Response *response) = 0;
     virtual void close() = 0;
 };
 

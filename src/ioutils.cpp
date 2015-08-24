@@ -48,16 +48,16 @@ int IOUtils :: tcpListen(const char * ip, int port, int * fd, int blocking)
 {
   int ret = 0;
 
-  int listenFd = socket( AF_INET, SOCK_STREAM, 0);
+  int listenFd = socket(AF_INET, SOCK_STREAM, 0);
 
   if(listenFd < 0) {
-    syslog( LOG_WARNING, "socket failed, errno %d, %s", errno, strerror(errno));
+    syslog(LOG_WARNING, "socket failed, errno %d, %s", errno, strerror(errno));
     ret = -1;
   }
 
   if(0 == ret && 0 == blocking) {
-    if( setNonblock( listenFd ) < 0 ) {
-      syslog( LOG_WARNING, "failed to set socket to non-blocking");
+    if(setNonblock(listenFd) < 0) {
+      syslog(LOG_WARNING, "failed to set socket to non-blocking");
       ret = -1;
     }
   }

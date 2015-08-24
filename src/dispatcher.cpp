@@ -230,7 +230,7 @@ int SP_Dispatcher :: push(int fd, Handler * handler, IOChannel * ioChannel, int 
   arg->mIOChannel = ioChannel;
   arg->mNeedStart = needStart;
 
-  IOUtils::setNonblock( fd );
+  IOUtils::setNonblock(fd);
 
   return msgqueue_push((struct event_msgqueue*)mPushQueue, arg);
 }
@@ -262,9 +262,9 @@ void Dispatcher :: timer(void * arg)
   msgqueue_push((struct event_msgqueue*)eventArg->getResponseQueue(), response);
 }
 
-int SP_Dispatcher :: push( const struct timeval * timeout, SP_TimerHandler * handler )
+int Dispatcher :: push(const struct timeval * timeout, SP_TimerHandler * handler)
 {
-  PushArg_t * arg = (PushArg_t*)malloc(sizeof(PushArg_t ));
+  PushArg_t * arg = (PushArg_t*)malloc(sizeof(PushArg_t));
 
   arg->mType = 1;
   arg->mTimeout = *timeout;
