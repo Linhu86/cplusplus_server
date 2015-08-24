@@ -2,10 +2,9 @@
 #include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <event.h>
 
 #include "buffer.hpp"
-
-#include "event.h"
 
 Buffer :: Buffer()
 {

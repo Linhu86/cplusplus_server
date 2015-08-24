@@ -3,6 +3,14 @@
 #include <errno.h>
 #include <string.h>
 #include <assert.h>
+#include <unistd.h>
+#include <signal.h>
+#include <sys/un.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netinet/tcp.h>
+#include <arpa/inet.h>
+#include <sys/syslog.h>
 
 #include "ioutils.hpp"
 
@@ -84,7 +92,7 @@ int IOUtils :: tcpListen(const char * ip, int port, int * fd, int blocking)
 
     addr.sin_addr.s_addr = INADDR_ANY;
     if('\0' != *ip) {
-      if(0 == sp_inet_aton(ip, &addr.sin_addr)) {
+      if(0 == inet_aton(ip, &addr.sin_addr)) {
         syslog(LOG_WARNING, "failed to convert %s to inet_addr", ip);
         ret = -1;
       }
@@ -106,7 +114,7 @@ int IOUtils :: tcpListen(const char * ip, int port, int * fd, int blocking)
   }
 
   if(0 != ret && listenFd >= 0)
-    sp_close( listenFd );
+    close( listenFd );
 
   if(0 == ret) {
     * fd = listenFd;
@@ -116,7 +124,7 @@ int IOUtils :: tcpListen(const char * ip, int port, int * fd, int blocking)
   return ret;
 }
 
-int SP_IOUtils :: tcpListen(const char * path, int * fd, int blocking, int mode)
+int IOUtils :: tcpListen(const char * path, int * fd, int blocking, int mode)
 {
 
   int ret = 0;

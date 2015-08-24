@@ -8,6 +8,9 @@ class evbuffer;
 class ArrayList;
 class MsgBlockList;
 
+typedef unsigned short uint16_t;
+typedef unsigned int uint32_t;
+
 typedef struct tag_Sid
 {
   uint32_t mKey;
@@ -60,8 +63,8 @@ class Message
     int getCompletionKey();
 
   private:
-    Message(SP_Message &);
-    Message & operator=(SP_Message &);
+    Message(Message &);
+    Message & operator=(Message &);
     Buffer * mMsg;
     MsgBlockList * mFollowBlockList;
     SidList * mToList;

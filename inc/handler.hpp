@@ -1,6 +1,8 @@
 #ifndef __HANDLER_HPP__
 #define __HANDLER_HPP__
 
+#include "request.hpp"
+
 struct event;
 struct timeval;
 
@@ -17,14 +19,14 @@ class Handler
 
 class TimerHandler{
   public:
-    virtual TimerHandler();
+    virtual ~TimerHandler();
     virtual int handle(Response *response, struct timeval *timeout) = 0;
 };
 
 
 class CompletionHandler{
   public:
-    virtual CompletionHandler();
+    virtual ~CompletionHandler();
     virtual void completionMessage(Message *msg) = 0;
 };
 

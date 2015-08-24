@@ -1,6 +1,8 @@
 #ifndef __MSGDECODER_HPP__
 #define __MSGDECODER_HPP__
 
+#include "utils.hpp"
+
 class Buffer;
 
 class MsgDecoder{
@@ -28,7 +30,7 @@ class LineMsgDecoder : public MsgDecoder
 {
   public:
     LineMsgDecoder();
-    virtual ~DefaultMsgDecoder();
+    virtual ~LineMsgDecoder();
     virtual int decode( Buffer *inBuffer );
     const char *getMsg();
 
@@ -46,10 +48,10 @@ class MultiLineMsgDecoder : public MsgDecoder
     ~MultiLineMsgDecoder(); 
     
     virtual int decode (Buffer *inBuffer );
-    CirculeQueue *mQueue();
+    CircleQueue *getQueue();
     
   private:
-    CirculeQueue *mQueue;
+    CircleQueue *mQueue;
 };
 
 class DotTermMsgDecoder : public MsgDecoder

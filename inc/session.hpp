@@ -1,7 +1,11 @@
-#include __SESSION_HPP__
-#include __SESSION_HPP__
+#ifndef __SESSION_HPP__
+#define __SESSION_HPP__
 
 #include "response.hpp"
+#include "iochannel.hpp"
+#include "handler.hpp"
+#include "session.hpp"
+#include "buffer.hpp"
 
 class Handler;
 class Buffer;
@@ -32,25 +36,25 @@ class Session
     Buffer *getInBuffer();
     Request * getRequest();
 
-    void setOutOffset( int offset );
+    void setOutOffset(int offset);
     int getOutOffset();
     ArrayList * getOutList();
 
-    enum { eNormal, eWouldExit, eExit };
-    void setStatus( int status );
+    enum {eNormal, eWouldExit, eExit};
+    void setStatus(int status);
     int getStatus();
 
     int getRunning();
-    void setRunning( int running );
+    void setRunning(int running);
 
     int getReading();
-    void setReading( int reading );
+    void setReading(int reading);
 
     int getWriting();
-    void setWriting( int writing );
+    void setWriting(int writing);
 
-    SP_IOChannel * getIOChannel();
-    void setIOChannel( SP_IOChannel * ioChannel );
+    IOChannel * getIOChannel();
+    void setIOChannel(IOChannel * ioChannel);
 
     unsigned int getTotalRead();
     void addRead( int len );
@@ -60,8 +64,8 @@ class Session
 
 private:
 
-    Session( SP_Session & );
-    Session & operator=( SP_Session & );
+    Session(Session &);
+    Session & operator=(Session &);
 
     Sid_t mSid;
 
@@ -75,7 +79,7 @@ private:
     Request * mRequest;
 
     int mOutOffset;
-    SP_ArrayList * mOutList;
+    ArrayList * mOutList;
 
     char mStatus;
     char mRunning;
@@ -96,7 +100,7 @@ class SessionManager {
     ~SessionManager();
 
     int getCount();
-    void put(uint32_t key, uint16_t seq, SP_Session * session);
+    void put(uint32_t key, uint16_t seq, Session * session);
     Session * get(uint32_t key, uint16_t * seq);
     Session * remove(uint32_t key, uint16_t seq);
 

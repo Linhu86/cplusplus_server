@@ -10,7 +10,7 @@ LINKER = $(CC)
 LINT = lint -c
 RM = /bin/rm -f
 
-LIBEVENT_INCL = -I../inc 
+LIBEVENT_INCL = -I../inc
 LIBEVENT_LIB  = -levent -lrt
 
 CFLAGS  += $(LIBEVENT_INCL)
@@ -18,7 +18,11 @@ LDFLAGS += $(LIBEVENT_LIB)
 
 #--------------------------------------------------------------------
 
-LIBOBJS = threadpool.o testpool.o
+LIBOBJS = utils.o ioutils.o iochannel.o \
+	threadpool.o buffer.o handler.o \
+	msgblock.o msgdecoder.o response.o request.o \
+	executor.o session.o eventcb.o server.o \
+	dispatcher.o
 
 TARGET =  libserver.so libserver.a \
 		testpool 

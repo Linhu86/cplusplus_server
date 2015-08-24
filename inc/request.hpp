@@ -1,7 +1,9 @@
 #ifndef __REQUEST_HPP__
 #define __REQUEST_HPP__
 
-#include "porting.hpp"
+//#include "porting.hpp"
+
+#include "msgdecoder.hpp"
 
 class MsgDecoder;
 
@@ -10,9 +12,9 @@ class Request{
     Request();
     ~Request();
 
-    MesDecoder *getMsgDecoder();
+    MsgDecoder *getMsgDecoder();
 
-    void setMsgDecoder(MsgDecoder);
+    void setMsgDecoder(MsgDecoder * decoder);
 
     void setClientIP(const char *clientIP);
 

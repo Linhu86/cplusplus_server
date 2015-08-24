@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+#include <event.h>
 
 #include "session.hpp"
 #include "handler.hpp"
@@ -10,9 +11,6 @@
 #include "utils.hpp"
 #include "request.hpp"
 #include "iochannel.hpp"
-
-#include "event.h"
-
 
 typedef struct tag_SessionEntry {
   uint16_t mSeq;

@@ -14,12 +14,12 @@ class MsgBlock
     virtual size_t getSize() const = 0;
 };
 
-class MsgBlockList
+class MsgBlockList 
 {
   public:
     MsgBlockList();
-    MsgBlockList();
-
+    ~MsgBlockList();
+ 
     void reset();
     size_t getTotalSize() const;
 

@@ -18,8 +18,8 @@ class ArrayList {
     void clean();
 
   private:
-    ArrayList( SP_ArrayList & );
-    ArrayList & operator=( SP_ArrayList & );
+    ArrayList( ArrayList & );
+    ArrayList & operator=( ArrayList & );
 
     int mMaxCount;
     int mCount;
@@ -63,8 +63,8 @@ class BlockingQueue {
 
   private:
     CircleQueue * mQueue;
-    thread_mutex_t mMutex;
-    thread_cond_t mCond;
+    pthread_mutex_t mMutex;
+    pthread_cond_t mCond;
 };
 
 #endif

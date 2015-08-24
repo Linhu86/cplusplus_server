@@ -221,7 +221,7 @@ int Dispatcher :: push(int fd, Handler * handler, int needStart)
   return push(fd, handler, ioChannel, needStart);
 }
 
-int SP_Dispatcher :: push(int fd, Handler * handler, IOChannel * ioChannel, int needStart)
+int Dispatcher :: push(int fd, Handler * handler, IOChannel * ioChannel, int needStart)
 {
   PushArg_t * arg = (PushArg_t*)malloc(sizeof(PushArg_t));
   arg->mType = 0;

@@ -1,7 +1,5 @@
-#ifndef __buffer_hpp__
-#define __buffer_hpp__
-
-#include <stdlib.h>
+#ifndef __BUFFER_HPP__
+#define __BUFFER_HPP__
 
 typedef struct evbuffer evbuffer_t;
 
@@ -32,11 +30,11 @@ class Buffer {
 
     size_t getSize() const;
 
-    int take( char *buffer, int len);
+    int take(char *buffer, int len);
 
     char *getLine();
  
-    const void *find( const void *key, size_t len );
+    const void *find(const void *key, size_t len);
 
     Buffer *take();
 

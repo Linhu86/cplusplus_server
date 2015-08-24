@@ -4,21 +4,19 @@
 class Session;
 class Buffer;
 
-typedef struct evbuffer evbuffer_t;
-
 struct iovec;
 
 class IOChannel
 {
   public:
     virtual ~IOChannel();
-    virtual int init( int fd );
-    virtual int receive( Session *session );
-    virtual int transmit( Session *session );
+    virtual int init(int fd);
+    virtual int receive(Session *session);
+    virtual int transmit(Session *session);
 
   protected:
     static evbuffer_t *getEvBuffer( Buffer *buffer );
-    virtual int write_vec( struct iovec *iovArray, int iovSize ) = 0;
+    virtual int write_vec(struct iovec *iovArray, int iovSize) = 0;
 
 };
 

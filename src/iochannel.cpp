@@ -15,8 +15,6 @@
 #include "msgblock.hpp"
 
 #include "eventcb.hpp"
-#include "event.h"
-
 
 IOChannel :: ~IOChannel()
 {
@@ -98,5 +96,57 @@ int IOChannel :: transmit(Session * session)
 
   return len;
 }
+
+
+//---------------------------------------------------------
+
+IOChannelFactory :: ~IOChannelFactory()
+{
+}
+
+//---------------------------------------------------------
+
+DefaultIOChannel :: DefaultIOChannel()
+{
+  mFd = -1;
+}
+
+DefaultIOChannel :: ~DefaultIOChannel()
+{
+  mFd = -1;
+}
+
+int DefaultIOChannel :: init(int fd)
+{
+  mFd = fd;
+  return 0;
+}
+
+int DefaultIOChannel :: receive(Session * session)
+{
+  return evbuffer_read(getEvBuffer( session->getInBuffer() ), mFd, -1);
+}
+
+int DefaultIOChannel :: write_vec(struct iovec * iovArray, int iovSize)
+{
+  return writev(mFd, iovArray, iovSize);
+}
+
+//---------------------------------------------------------
+
+DefaultIOChannelFactory :: DefaultIOChannelFactory()
+{
+}
+
+DefaultIOChannelFactory :: ~DefaultIOChannelFactory()
+{
+}
+
+IOChannel * DefaultIOChannelFactory :: create() const
+{
+  return new DefaultIOChannel();
+}
+
+
 
 
