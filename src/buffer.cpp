@@ -78,11 +78,6 @@ int Buffer :: getCapacity()
   return mBuffer->totallen;
 }
 
-int Buffer :: getCapacity()
-{
-  return mBuffer->totallen;
-}
-
 const void *Buffer :: getBuffer() const
 {
   if( NULL != EVBUFFER_DATA( mBuffer ) ) {

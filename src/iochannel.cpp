@@ -5,16 +5,21 @@
 
 #include <string.h>
 #include <assert.h>
+#include <event.h>
 
 #include "iochannel.hpp"
-
+#include "buffer.hpp"
 #include "utils.hpp"
 #include "response.hpp"
 #include "session.hpp"
-#include "buffer.hpp"
 #include "msgblock.hpp"
 
 #include "eventcb.hpp"
+
+
+IOChannel :: IOChannel()
+{
+}
 
 IOChannel :: ~IOChannel()
 {
@@ -27,7 +32,7 @@ evbuffer_t * IOChannel :: getEvBuffer(Buffer * buffer)
 
 int IOChannel :: transmit(Session * session)
 {
-  const MAX_IOV = 8;
+  const static int MAX_IOV = 8;
   EventArg * eventArg = (EventArg*)session->getArg();
 
   ArrayList * outList = session->getOutList();
@@ -38,7 +43,7 @@ int IOChannel :: transmit(Session * session)
 
   int iovSize = 0;
 
-  for(int i = 0; i<outList->getCount() && iovSize<SP_MAX_IOV; i++) {
+  for(int i = 0; i<outList->getCount() && iovSize<MAX_IOV; i++) {
     Message * msg = (Message*)outList->getItem(i);
 
     if(outOffset >= msg->getMsg()->getSize()) {
@@ -50,7 +55,7 @@ int IOChannel :: transmit(Session * session)
     }
 
     MsgBlockList * blockList = msg->getFollowBlockList();
-    for(int j = 0; j < blockList->getCount() && iovSize < SP_MAX_IOV; j++) {
+    for(int j = 0; j < blockList->getCount() && iovSize < MAX_IOV; j++) {
       MsgBlock * block = (MsgBlock*)blockList->getItem(j);
       if(outOffset >= block->getSize()) {
         outOffset -= block->getSize();

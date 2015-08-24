@@ -3,9 +3,6 @@
 
 #include <stdio.h>
 
-class Buffer;
-class ArrayList;
-
 class MsgBlock
 {
   public:

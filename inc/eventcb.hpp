@@ -1,14 +1,6 @@
 #ifndef __EVENTCB_HPP__
 #define __EVENTCB_HPP__
 
-class HandlerFactory;
-class SessionManager;
-class Session;
-class BlockingQueue;
-class Message;
-class IOChannelFactory;
-
-struct event_base;
 typedef struct tag_Sid Sid_t;
 
 class EventArg 

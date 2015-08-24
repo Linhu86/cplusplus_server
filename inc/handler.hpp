@@ -35,7 +35,7 @@ class HandlerFactory{
     virtual ~HandlerFactory();
     virtual Handler *create() const = 0;
     virtual CompletionHandler *createCompletionHandler() const;
-}
+};
 
 #endif
 

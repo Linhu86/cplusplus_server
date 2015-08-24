@@ -4,17 +4,7 @@
 #include "response.hpp"
 #include "iochannel.hpp"
 #include "handler.hpp"
-#include "session.hpp"
 #include "buffer.hpp"
-
-class Handler;
-class Buffer;
-class Session;
-class ArrayList;
-class Request;
-class IOChannel;
-
-struct event;
 
 class Session
 {
@@ -28,8 +18,8 @@ class Session
     void setHandler( Handler *handler );
     Handler *getHandler();
 
-    void setarg( void *arg );
-    void *getarg();
+    void setArg( void *arg );
+    void *getArg();
 
     Sid_t getSid();
 

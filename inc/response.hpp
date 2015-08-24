@@ -3,10 +3,8 @@
 
 #include <sys/types.h>
 
-class Buffer;
-class evbuffer;
-class ArrayList;
-class MsgBlockList;
+#include "buffer.hpp" 
+#include "msgblock.hpp"
 
 typedef unsigned short uint16_t;
 typedef unsigned int uint32_t;

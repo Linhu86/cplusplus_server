@@ -7,6 +7,7 @@
 #include <signal.h>
 #include <sys/un.h>
 #include <sys/socket.h>
+#include <sys/stat.h>
 #include <netinet/in.h>
 #include <netinet/tcp.h>
 #include <arpa/inet.h>
