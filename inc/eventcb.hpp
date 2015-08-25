@@ -3,10 +3,18 @@
 
 typedef struct tag_Sid Sid_t;
 
+class BlockingQueue;
+class SessionManager;
+class Session;
+class HandlerFactory;
+class Message;
+class HandlerFactory;
+class IOChannelFactory;
+
 class EventArg 
 {
   public:
-    EventArg( int timeout );
+    EventArg(int timeout);
     ~EventArg();
       
     struct event_base * getEventBase() const;

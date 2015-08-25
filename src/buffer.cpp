@@ -101,12 +101,12 @@ size_t Buffer :: getSize() const
 
 char * Buffer :: getLine()
 {
-  return sp_evbuffer_readline(mBuffer);
+  return evbuffer_readline(mBuffer);
 }
 
 int Buffer :: take(char * buffer, int len)
 {
-  len = sp_evbuffer_remove( mBuffer, buffer, len - 1);
+  len = evbuffer_remove( mBuffer, buffer, len - 1);
   buffer[len] = '\0';
   return len;
 }

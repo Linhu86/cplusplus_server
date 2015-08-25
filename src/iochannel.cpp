@@ -6,6 +6,7 @@
 #include <string.h>
 #include <assert.h>
 #include <event.h>
+#include <sys/uio.h>
 
 #include "iochannel.hpp"
 #include "buffer.hpp"

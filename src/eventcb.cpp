@@ -5,7 +5,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <event.h>
-
+#include <syslog.h>
 
 #include "eventcb.hpp"
 #include "executor.hpp"
@@ -296,7 +296,7 @@ void EventCallback :: onResponse(void * queueData, void * arg)
     Session * session = manager->get( fromSid.mKey, &seq );
     if( seq == fromSid.mSeq && NULL != session ) {
       if( Session::eWouldExit == session->getStatus() ) {
-        session->setStatus( SP_Session::eExit );
+        session->setStatus( Session::eExit );
       }
 
       if( Session::eNormal != session->getStatus() ) {
@@ -340,7 +340,7 @@ void EventCallback :: onResponse(void * queueData, void * arg)
       }
     } else {
       for( ; sidList->getCount() > 0; ) {
-        msg->getFailure()->add( sidList->take( SP_ArrayList::LAST_INDEX ) );
+        msg->getFailure()->add( sidList->take( ArrayList::LAST_INDEX ) );
       }
     }
     if( msg->getToList()->getCount() <= 0 ) {
@@ -352,7 +352,7 @@ void EventCallback :: onResponse(void * queueData, void * arg)
     Sid_t sid = response->getToCloseList()->get( i );
     Session * session = manager->get( sid.mKey, &seq );
     if( seq == sid.mSeq && NULL != session ) {
-      session->setStatus( SP_Session::eExit );
+      session->setStatus( Session::eExit );
       addEvent( session, EV_WRITE, -1 );
     } else {
       syslog( LOG_WARNING, "session(%d.%d) invalid, unknown CLOSE", sid.mKey, sid.mSeq );
@@ -399,8 +399,8 @@ void EventCallback :: addEvent(Session * session, short events, int fd)
 
 int EventHelper :: isSystemSid(Sid_t * sid)
 {
-  return (sid->mKey == SP_Sid_t::eTimerKey && sid->mSeq == Sid_t::eTimerSeq)
-    || (sid->mKey == SP_Sid_t::ePushKey && sid->mSeq == Sid_t::ePushSeq);
+  return (sid->mKey == Sid_t::eTimerKey && sid->mSeq == Sid_t::eTimerSeq)
+    || (sid->mKey == Sid_t::ePushKey && sid->mSeq == Sid_t::ePushSeq);
 }
 
 void EventHelper :: doWork(Session * session)
@@ -603,9 +603,9 @@ void EventHelper :: start( void * arg )
   msgqueue_push( (struct event_msgqueue*)eventArg->getResponseQueue(), response );
 }
 
-void SP_EventHelper :: doCompletion(EventArg * eventArg, PMessage * msg )
+void EventHelper :: doCompletion(EventArg * eventArg, Message * msg )
 {
-	eventArg->getOutputResultQueue()->push( msg );
+  eventArg->getOutputResultQueue()->push( msg );
 }
 
 

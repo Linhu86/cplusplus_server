@@ -1,6 +1,7 @@
 #ifndef __IOUTILS_HPP__
 #define __IOUTILS_HPP__
 
+#include <netinet/in.h>
 
 class IOUtils {
   public:

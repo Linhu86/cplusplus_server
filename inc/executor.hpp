@@ -46,8 +46,8 @@ private:
 
     int mIsShutdown;
 
-    thread_mutex_t mMutex;
-    thread_cond_t mCond;
+    pthread_mutex_t mMutex;
+    pthread_cond_t mCond;
 };
 
 

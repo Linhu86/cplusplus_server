@@ -4,8 +4,7 @@
 #include <assert.h>
 #include <errno.h>
 #include <signal.h>
-
-#include "thread.hpp"
+#include <syslog.h>
 
 #include "dispatcher.hpp"
 
@@ -85,14 +84,14 @@ int Dispatcher :: dispatch()
 {
   int ret = -1;
 
-  thread_attr_t attr;
-  thread_attr_init(&attr);
-  assert(thread_attr_setstacksize(&attr, 1024 * 1024) == 0);
-  thread_attr_setdetachstate(&attr, THREAD_CREATE_DETACHED);
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  assert(pthread_attr_setstacksize(&attr, 1024 * 1024) == 0);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-  thread_t thread;
-  ret = thread_create(&thread, &attr, eventLoop, this);
-  thread_attr_destroy(&attr);
+  pthread_t thread;
+  ret = pthread_create(&thread, &attr, eventLoop, this);
+  pthread_attr_destroy(&attr);
   if(0 == ret) {
     syslog(LOG_NOTICE, "Thread #%ld has been created for dispatcher", thread);
   } else {
@@ -262,7 +261,7 @@ void Dispatcher :: timer(void * arg)
   msgqueue_push((struct event_msgqueue*)eventArg->getResponseQueue(), response);
 }
 
-int Dispatcher :: push(const struct timeval * timeout, SP_TimerHandler * handler)
+int Dispatcher :: push(const struct timeval * timeout, TimerHandler * handler)
 {
   PushArg_t * arg = (PushArg_t*)malloc(sizeof(PushArg_t));
 

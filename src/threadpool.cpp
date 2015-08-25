@@ -87,6 +87,12 @@ ThreadPool :: ~ThreadPool()
   mTag = NULL;
 }
 
+int ThreadPool :: getMaxThreads()
+{
+  return mMaxThreads;
+}
+
+
 int ThreadPool :: dispatch(DispatchFunc_t dispatchFunc, void *arg)
 {
   int ret = 0;

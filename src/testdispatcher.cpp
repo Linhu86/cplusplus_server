@@ -61,7 +61,7 @@ class EchoTimerHandler : public TimerHandler {
       mCount = 1;
     }
 
-    virtual EchoTimerHandler(){}
+    virtual ~EchoTimerHandler(){}
 
     // return -1 : terminate timer, 0 : continue
     virtual int handle(Response * response, struct timeval * timeout) {

@@ -1,6 +1,7 @@
 #ifndef __MSGDECODER_HPP__
 #define __MSGDECODER_HPP__
 
+#include <stdlib.h>
 #include "utils.hpp"
 
 class Buffer;

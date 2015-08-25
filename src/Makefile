@@ -1,6 +1,6 @@
 #--------------------------------------------------------------------
 
-CC = g++
+CC = gcc
 AR = ar cru
 CFLAGS = -Wall -D_REENTRANT -D_GNU_SOURCE -g -fPIC
 SOFLAGS = -shared
@@ -16,16 +16,18 @@ LIBEVENT_LIB  = -levent -lrt
 CFLAGS  += $(LIBEVENT_INCL)
 LDFLAGS += $(LIBEVENT_LIB)
 
+LIB_LINK_MODE = -static
+
 #--------------------------------------------------------------------
 
 LIBOBJS = utils.o ioutils.o iochannel.o \
 	threadpool.o buffer.o handler.o \
 	msgblock.o msgdecoder.o response.o request.o \
 	executor.o session.o eventcb.o server.o \
-	dispatcher.o
+	dispatcher.o event_msgqueue.o
 
 TARGET =  libserver.so libserver.a \
-		testpool 
+		testpool testdispatcher
 
 #--------------------------------------------------------------------
 
@@ -38,7 +40,10 @@ libserver.a: $(LIBOBJS)
 	$(AR) $@ $^
 
 testpool: testpool.o
-	$(LINKER) $^ -L. -lserver $(LDFLAGS) -o $@
+	$(LINKER) $^ $(LIB_LINK_MODE) -L. -lserver $(LDFLAGS) -o $@
+
+testdispatcher: testdispatcher.o
+	$(LINKER) $^ $(LIB_LINK_MODE) -L. -lserver $(LDFLAGS) -o $@
 
 clean:
 	@( $(RM) *.o vgcore.* core core.* $(TARGET) )

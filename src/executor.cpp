@@ -1,4 +1,5 @@
 #include <sys/types.h>
+#include <syslog.h>
 #include <assert.h>
 
 #include "executor.hpp"
@@ -39,17 +40,17 @@ Executor :: Executor(int maxThreads, const char * tag)
 
   mIsShutdown = 0;
 
-  thread_mutex_init(&mMutex, NULL);
-  thread_cond_init(&mCond, NULL);
+  pthread_mutex_init(&mMutex, NULL);
+  pthread_cond_init(&mCond, NULL);
 
-  thread_attr_t attr;
-  thread_attr_init(&attr);
-  assert(thread_attr_setstacksize(&attr, 1024 * 1024) == 0);
-  thread_attr_setdetachstate(&attr, THREAD_CREATE_DETACHED);
+  pthread_attr_t attr;
+  pthread_attr_init(&attr);
+  assert(pthread_attr_setstacksize(&attr, 1024 * 1024) == 0);
+  pthread_attr_setdetachstate(&attr, PTHREAD_CREATE_DETACHED);
 
-  thread_t thread;
-  int ret = thread_create(&thread, &attr, eventLoop, this);
-  thread_attr_destroy(&attr);
+  pthread_t thread;
+  int ret = pthread_create(&thread, &attr, eventLoop, this);
+  pthread_attr_destroy(&attr);
   if(0 == ret) {
     syslog(LOG_NOTICE, "[ex@%s] Thread #%ld has been created for executor", tag, thread);
   } else {
@@ -62,13 +63,13 @@ Executor :: ~Executor()
   shutdown();
 
   while(2 != mIsShutdown) {
-    thread_mutex_lock(&mMutex);
-    thread_cond_wait(&mCond, &mMutex);
-    thread_mutex_unlock(&mMutex);
+    pthread_mutex_lock(&mMutex);
+    pthread_cond_wait(&mCond, &mMutex);
+    pthread_mutex_unlock(&mMutex);
   }
 
-  thread_mutex_destroy( &mMutex );
-  thread_cond_destroy( &mCond);
+  pthread_mutex_destroy( &mMutex );
+  pthread_cond_destroy( &mCond);
 
   delete mThreadPool;
   mThreadPool = NULL;
@@ -79,14 +80,14 @@ Executor :: ~Executor()
 
 void Executor :: shutdown()
 {
-  thread_mutex_lock(&mMutex);
+  pthread_mutex_lock(&mMutex);
   if(0 == mIsShutdown) {
     mIsShutdown = 1;
 
   // signal the event loop to wake up
     execute(worker, NULL);
   }
-  thread_mutex_unlock(&mMutex);
+  pthread_mutex_unlock(&mMutex);
 }
 
 thread_result_t THREAD_CALL Executor :: eventLoop(void * arg)
@@ -105,10 +106,10 @@ thread_result_t THREAD_CALL Executor :: eventLoop(void * arg)
     }
   }
 
-  thread_mutex_lock(&executor->mMutex);
+  pthread_mutex_lock(&executor->mMutex);
   executor->mIsShutdown = 2;
-  thread_cond_signal(&executor->mCond);
-  thread_mutex_unlock(&executor->mMutex);
+  pthread_cond_signal(&executor->mCond);
+  pthread_mutex_unlock(&executor->mMutex);
 
   return 0;
 }

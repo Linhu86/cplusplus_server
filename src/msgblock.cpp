@@ -38,7 +38,7 @@ size_t MsgBlockList :: getTotalSize() const
   size_t totalSize = 0;
 
   for(int i = 0; i < mList->getCount(); i++) {
-    MsgBlock * msgBlock = (SP_MsgBlock*)mList->getItem( i );
+    MsgBlock * msgBlock = (MsgBlock*)mList->getItem( i );
     totalSize += msgBlock->getSize();
   }
 
@@ -66,8 +66,7 @@ MsgBlock *MsgBlockList :: takeItem(int index)
   return (MsgBlock*)mList->takeItem(index);
 }
 
-
-class BufferMsgBlock :: BufferMsgBlock()
+BufferMsgBlock :: BufferMsgBlock()
 {
   mBuffer = new Buffer();
   mToBeOwner = 1;
@@ -79,7 +78,7 @@ BufferMsgBlock :: BufferMsgBlock(Buffer * buffer, int toBeOwner)
   mToBeOwner = toBeOwner;
 }
 
-BufferMsgBlock :: ~SP_BufferMsgBlock()
+BufferMsgBlock :: ~BufferMsgBlock()
 {
   if( mToBeOwner ) delete mBuffer;
     mBuffer = NULL;

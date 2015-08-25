@@ -20,19 +20,19 @@ SidList :: ~SidList()
   mList = NULL;
 }
 
-void SP_SidList :: reset()
+void SidList :: reset()
 {
   for( ; mList->getCount() > 0; ) {
     free((void*)mList->takeItem(ArrayList::LAST_INDEX));
   }
 }
 
-int SP_SidList :: getCount() const
+int SidList :: getCount() const
 {
   return mList->getCount();
 }
 
-void SP_SidList :: add(Sid_t sid)
+void SidList :: add(Sid_t sid)
 {
   Sid_t * p = (Sid_t*)malloc(sizeof(Sid_t));
   *p = sid;
@@ -50,7 +50,7 @@ Sid_t SidList :: get(int index) const
   return ret;
 }
 
-Sid_t SP_SidList :: take(int index)
+Sid_t SidList :: take(int index)
 {
   Sid_t ret = get(index);
   void * p = mList->takeItem(index);
@@ -131,7 +131,7 @@ void Message :: reset()
 SidList * Message :: getToList()
 {
   if(NULL == mToList)
-    mToList = new SP_SidList();
+    mToList = new SidList();
 
   return mToList;
 }
@@ -251,7 +251,7 @@ Message *Response :: takeMessage()
 SidList * Response :: getToCloseList()
 {
   if(NULL == mToCloseList) 
-    mToCloseList = new SP_SidList();
+    mToCloseList = new SidList();
   return mToCloseList;
 }
 

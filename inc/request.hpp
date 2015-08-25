@@ -22,7 +22,7 @@ class Request{
 
     void setClientPort(const int port);
 
-    const int getClientPort();
+    int getClientPort();
 
     void setServerIP(const char *ip);
 

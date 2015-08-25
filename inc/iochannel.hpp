@@ -21,17 +21,12 @@ class IOChannel
 
 };
 
-class IOChannelFactory{
+class IOChannelFactory {
   public:
-    ~IOChannelFactory();
-    virtual int init( int fd );
-    virtual int receive( Session * session );
-
-  protected:
-    virtual int write_vec( struct iovec * iovArray, int iovSize );
-    int mFd;
-
+    virtual ~IOChannelFactory();
+    virtual IOChannel * create() const = 0;
 };
+
 
 class DefaultIOChannelFactory : public IOChannelFactory {
   public:

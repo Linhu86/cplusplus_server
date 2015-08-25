@@ -3,6 +3,9 @@
 
 #include "request.hpp"
 
+class Response;
+class Message;
+
 struct event;
 struct timeval;
 
@@ -29,6 +32,15 @@ class CompletionHandler{
     virtual ~CompletionHandler();
     virtual void completionMessage(Message *msg) = 0;
 };
+
+class DefaultCompletionHandler : public CompletionHandler {
+  public:
+    DefaultCompletionHandler();
+    ~DefaultCompletionHandler();
+
+    virtual void completionMessage(Message * msg);
+};
+
 
 class HandlerFactory{
   public:

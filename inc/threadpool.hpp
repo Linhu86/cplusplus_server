@@ -14,7 +14,7 @@ class ThreadPool
 
       int dispatch(DispatchFunc_t dispatchFunc, void *arg);
 
-      int getMaxThreads;
+      int getMaxThreads();
 
   private:
      char *mTag;

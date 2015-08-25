@@ -2,6 +2,10 @@
 #define __MSGBLOCK_HPP__
 
 #include <stdio.h>
+#include <stdlib.h>
+
+class ArrayList;
+class Buffer;
 
 class MsgBlock
 {
@@ -28,7 +32,7 @@ class MsgBlockList
 private:
     MsgBlockList(MsgBlockList &);
     MsgBlockList &operator=(MsgBlockList &);
-    ArrayList * mList;
+    ArrayList *mList;
 };
 
 class BufferMsgBlock : public MsgBlock

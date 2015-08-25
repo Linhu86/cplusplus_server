@@ -1,5 +1,6 @@
 #include <string.h>
 #include <stdio.h>
+#include <event.h>
 
 #include "request.hpp"
 #include "msgdecoder.hpp"
@@ -34,7 +35,7 @@ void Request :: setMsgDecoder(MsgDecoder * decoder)
 
 void Request :: setClientIP(const char * clientIP)
 {
-  strlcpy(mClientIP, clientIP, sizeof(mClientIP));
+  strncpy(mClientIP, clientIP, sizeof(mClientIP));
 }
 
 const char *Request :: getClientIP()
@@ -54,7 +55,7 @@ int Request :: getClientPort()
 
 void Request :: setServerIP(const char * ip)
 {
-  strlcpy(mServerIP, ip, sizeof(mServerIP));
+  strncpy(mServerIP, ip, sizeof(mServerIP));
 }
 
 const char * Request :: getServerIP()
