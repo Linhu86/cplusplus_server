@@ -28,14 +28,14 @@ class EchoHandler : public Handler {
     virtual ~EchoHandler(){}
 
     // return -1 : terminate session, 0 : continue
-    virtual int start(Request * request, Response * response) {
+    int start(Request * request, Response * response) {
       request->setMsgDecoder(new LineMsgDecoder());
       response->getReply()->getMsg()->append("Welcome to line echo dispatcher, enter 'quit' to quit.\r\n");
       return 0;
     }
 
     // return -1 : terminate session, 0 : continue
-    virtual int handle(Request * request, Response * response) {
+    int handle(Request * request, Response * response) {
       LineMsgDecoder * decoder = (LineMsgDecoder*)request->getMsgDecoder();
 
       if(0 != strcasecmp((char*)decoder->getMsg(), "quit")) {
@@ -48,11 +48,11 @@ class EchoHandler : public Handler {
       }
     }
 
-    virtual void error(Response * response) {}
+    void error(Response * response) {}
 
-    virtual void timeout(Response * response) {}
+    void timeout(Response * response) {}
 
-    virtual void close() {}
+    void close() {}
 };
 
 class EchoTimerHandler : public TimerHandler {
@@ -64,21 +64,21 @@ class EchoTimerHandler : public TimerHandler {
     virtual ~EchoTimerHandler(){}
 
     // return -1 : terminate timer, 0 : continue
-    virtual int handle(Response * response, struct timeval * timeout) {
-    syslog(LOG_NOTICE, "time = %li, call timer handler", time(NULL));
+    int handle(Response * response, struct timeval * timeout) {
+      syslog(LOG_NOTICE, "time = %li, call timer handler", time(NULL));
 
-    if(++mCount >= 10) {
-      syslog(LOG_NOTICE, "stop timer");
-      return -1;
-    } else {
-      syslog(LOG_NOTICE, "set timer to %d seconds later", mCount);
-      timeout->tv_sec = mCount;
-      return 0;
+      if(++mCount >= 10) {
+        syslog(LOG_NOTICE, "stop timer");
+        return -1;
+      } else {
+        syslog(LOG_NOTICE, "set timer to %d seconds later", mCount);
+        timeout->tv_sec = mCount;
+        return 0;
+      }
     }
-  }
 
   private:
-  int mCount;
+    int mCount;
 };
 
 int main(int argc, char * argv[])

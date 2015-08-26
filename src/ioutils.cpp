@@ -108,7 +108,7 @@ int IOUtils :: tcpListen(const char * ip, int port, int * fd, int blocking)
   }
 
   if(0 == ret) {
-    if( ::listen( listenFd, 1024 ) < 0) {
+    if(listen( listenFd, 1024 ) < 0) {
       syslog( LOG_WARNING, "listen failed, errno %d, %s", errno, strerror(errno));
       ret = -1;
     }
