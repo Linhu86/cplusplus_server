@@ -9,7 +9,7 @@
 class Session
 {
    public:
-    Session( Sid_t id);
+    Session( Resonse_Sid_t id);
     virtual ~Session();
 
     struct event *getReadEvent();
@@ -21,7 +21,7 @@ class Session
     void setArg( void *arg );
     void *getArg();
 
-    Sid_t getSid();
+    Resonse_Sid_t getSid();
 
     Buffer *getInBuffer();
     Request * getRequest();
@@ -57,7 +57,7 @@ private:
     Session(Session &);
     Session & operator=(Session &);
 
-    Sid_t mSid;
+    Resonse_Sid_t mSid;
 
     struct event * mReadEvent;
     struct event * mWriteEvent;

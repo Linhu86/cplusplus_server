@@ -20,8 +20,7 @@ typedef struct tag_Sid
     ePushKey = 1,
     ePushSeq = 65535
   };
-
-} Sid_t;
+} Resonse_Sid_t;
 
 
 class SidList
@@ -32,10 +31,10 @@ class SidList
 
     void reset();
     int getCount() const;
-    void add(Sid_t sid);
-    Sid_t get(int index) const;
-    Sid_t take(int index);
-    int find(Sid_t sid) const;
+    void add(Resonse_Sid_t sid);
+    Resonse_Sid_t get(int index) const;
+    Resonse_Sid_t take(int index);
+    int find(Resonse_Sid_t sid) const;
 
   private:
     SidList(SidList &);
@@ -74,10 +73,10 @@ class Message
 
 class Response {
   public:
-    Response(Sid_t fromSid);
+    Response(Resonse_Sid_t fromSid);
     ~Response();
 
-    Sid_t getFromSid() const;
+    Resonse_Sid_t getFromSid() const;
     Message * getReply();
     void addMessage(Message * msg);
     Message * peekMessage();
@@ -87,7 +86,7 @@ class Response {
 private:
     Response(Response &);
     Response & operator=(Response &);
-    Sid_t mFromSid;
+    Resonse_Sid_t mFromSid;
     Message * mReply;
     SidList * mToCloseList;
     ArrayList * mList;

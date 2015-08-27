@@ -27,7 +27,7 @@ LIBOBJS = utils.o ioutils.o iochannel.o \
 	dispatcher.o event_msgqueue.o
 
 TARGET =  libserver.so libserver.a \
-		testpool testdispatcher
+		testpool testdispatcher testecho
 
 #--------------------------------------------------------------------
 
@@ -43,6 +43,9 @@ testpool: testpool.o
 	$(LINKER) $^ $(LIB_LINK_MODE) -L. -lserver $(LDFLAGS) -o $@
 
 testdispatcher: testdispatcher.o
+	$(LINKER) $^ $(LIB_LINK_MODE) -L. -lserver $(LDFLAGS) -o $@
+
+testecho: testecho.o
 	$(LINKER) $^ $(LIB_LINK_MODE) -L. -lserver $(LDFLAGS) -o $@
 
 clean:

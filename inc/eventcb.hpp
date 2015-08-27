@@ -1,8 +1,6 @@
 #ifndef __EVENTCB_HPP__
 #define __EVENTCB_HPP__
 
-typedef struct tag_Sid Sid_t;
-
 class BlockingQueue;
 class SessionManager;
 class Session;
@@ -10,6 +8,8 @@ class HandlerFactory;
 class Message;
 class HandlerFactory;
 class IOChannelFactory;
+
+typedef struct tag_Sid Event_Sid_t;
 
 class EventArg 
 {
@@ -70,7 +70,7 @@ class EventHelper {
     static void doClose(Session * session);
     static void myclose(void * arg);
     static void doCompletion(EventArg * eventArg, Message * msg);
-    static int isSystemSid(Sid_t * sid);
+    static int isSystemSid(Event_Sid_t * sid);
 
   private:
     EventHelper();

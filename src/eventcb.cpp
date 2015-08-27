@@ -105,7 +105,7 @@ void EventCallback :: onAccept(int fd, short events, void * arg)
     syslog(LOG_WARNING, "failed to set client socket non-blocking");
   }
 
-  Sid_t sid;
+  Event_Sid_t sid;
   sid.mKey = eventArg->getSessionManager()->allocKey(&sid.mSeq);
   assert(sid.mKey > 0);
 
@@ -160,7 +160,7 @@ void EventCallback :: onRead(int fd, short events, void * arg)
 
   session->setReading(0);
 
-  Sid_t sid = session->getSid();
+  Event_Sid_t sid = session->getSid();
 
   if(EV_READ & events) {
     int len = session->getIOChannel()->receive( session );
@@ -213,7 +213,7 @@ void EventCallback :: onWrite(int fd, short events, void * arg)
 
     session->setWriting( 0 );
 
-    Sid_t sid = session->getSid();
+    Event_Sid_t sid = session->getSid();
 
     if( EV_WRITE & events ) {
       int ret = 0;
@@ -289,10 +289,10 @@ void EventCallback :: onResponse(void * queueData, void * arg)
   EventArg * eventArg = (EventArg*)arg;
   SessionManager * manager = eventArg->getSessionManager();
 
-  Sid_t fromSid = response->getFromSid();
+  Event_Sid_t fromSid = response->getFromSid();
   uint16_t seq = 0;
 
-  if( ! EventHelper::isSystemSid( &fromSid ) ) {
+  if(! EventHelper::isSystemSid( &fromSid ) ) {
     Session * session = manager->get( fromSid.mKey, &seq );
     if( seq == fromSid.mSeq && NULL != session ) {
       if( Session::eWouldExit == session->getStatus() ) {
@@ -320,7 +320,7 @@ void EventCallback :: onResponse(void * queueData, void * arg)
 
     if( msg->getTotalSize() > 0 ) {
       for( int i = sidList->getCount() - 1; i >= 0; i-- ) {
-        Sid_t sid = sidList->get( i );
+        Event_Sid_t sid = sidList->get( i );
         Session * session = manager->get( sid.mKey, &seq );
         if( seq == sid.mSeq && NULL != session ) {
           if( 0 != memcmp( &fromSid, &sid, sizeof( sid ) )
@@ -349,7 +349,7 @@ void EventCallback :: onResponse(void * queueData, void * arg)
   }
 
   for( int i = 0; i < response->getToCloseList()->getCount(); i++ ) {
-    Sid_t sid = response->getToCloseList()->get( i );
+    Event_Sid_t sid = response->getToCloseList()->get( i );
     Session * session = manager->get( sid.mKey, &seq );
     if( seq == sid.mSeq && NULL != session ) {
       session->setStatus( Session::eExit );
@@ -397,10 +397,10 @@ void EventCallback :: addEvent(Session * session, short events, int fd)
 
 //-------------------------------------------------------------------
 
-int EventHelper :: isSystemSid(Sid_t * sid)
+int EventHelper :: isSystemSid(Event_Sid_t * sid)
 {
-  return (sid->mKey == Sid_t::eTimerKey && sid->mSeq == Sid_t::eTimerSeq)
-    || (sid->mKey == Sid_t::ePushKey && sid->mSeq == Sid_t::ePushSeq);
+  return (sid->mKey == Event_Sid_t::eTimerKey && sid->mSeq == Event_Sid_t::eTimerSeq)
+    || (sid->mKey == Event_Sid_t::ePushKey && sid->mSeq == Event_Sid_t::ePushSeq);
 }
 
 void EventHelper :: doWork(Session * session)
@@ -410,7 +410,7 @@ void EventHelper :: doWork(Session * session)
     EventArg * eventArg = (EventArg*)session->getArg();
     eventArg->getInputResultQueue()->push( new SimpleTask( worker, session, 1 ) );
   } else {
-    Sid_t sid = session->getSid();
+    Event_Sid_t sid = session->getSid();
 
     char buffer[ 16 ] = { 0 };
     session->getInBuffer()->take( buffer, sizeof( buffer ) );
@@ -443,7 +443,7 @@ void EventHelper :: doError( Session * session )
   event_del( session->getWriteEvent() );
   event_del( session->getReadEvent() );
 
-  Sid_t sid = session->getSid();
+  Event_Sid_t sid = session->getSid();
 
   ArrayList * outList = session->getOutList();
   for( ; outList->getCount() > 0; ) {
@@ -469,7 +469,7 @@ void EventHelper :: error( void * arg )
   Session * session = (Session *)arg;
   EventArg * eventArg = (EventArg*)session->getArg();
 
-  Sid_t sid = session->getSid();
+  Event_Sid_t sid = session->getSid();
 
   Response * response = new Response( sid );
   session->getHandler()->error( response );
@@ -494,7 +494,7 @@ void EventHelper :: doTimeout(Session * session)
   event_del(session->getWriteEvent());
   event_del(session->getReadEvent());
 
-  Sid_t sid = session->getSid();
+  Event_Sid_t sid = session->getSid();
 
   ArrayList * outList = session->getOutList();
   for( ; outList->getCount() > 0; ) {
@@ -519,7 +519,7 @@ void EventHelper :: timeout(void * arg)
   Session * session = (Session *)arg;
   EventArg * eventArg = (EventArg*)session->getArg();
 
-  Sid_t sid = session->getSid();
+  Event_Sid_t sid = session->getSid();
 
   Response * response = new Response( sid );
   session->getHandler()->timeout( response );
@@ -544,7 +544,7 @@ void EventHelper :: doClose(Session * session)
   event_del( session->getWriteEvent() );
   event_del( session->getReadEvent() );
 
-  Sid_t sid = session->getSid();
+  Event_Sid_t sid = session->getSid();
 
   eventArg->getSessionManager()->remove(sid.mKey, sid.mSeq);
 
@@ -555,7 +555,7 @@ void EventHelper :: myclose(void * arg)
 {
   Session * session = (Session *)arg;
   EventArg * eventArg = (EventArg*)session->getArg();
-  Sid_t sid = session->getSid();
+  Event_Sid_t sid = session->getSid();
 
   syslog( LOG_DEBUG, "session(%d.%d) close, r %d(%d), w %d(%d), i %d, o %d, s %d(%d)",
       sid.mKey, sid.mSeq, session->getTotalRead(), session->getReading(),

@@ -141,7 +141,7 @@ Session * SessionManager :: remove(uint32_t key, uint16_t seq)
 
 /*-----------------------------------------------------------------*/
 
-Session :: Session(Sid_t sid)
+Session :: Session(Resonse_Sid_t sid)
 {
   mSid = sid;
   mReadEvent = NULL;
@@ -224,7 +224,7 @@ void * Session :: getArg()
   return mArg;
 }
 
-Sid_t Session :: getSid()
+Resonse_Sid_t Session :: getSid()
 {
   return mSid;
 }

@@ -173,7 +173,7 @@ void Dispatcher :: onPush(void * queueData, void * arg)
   EventArg * eventArg = (EventArg*)arg;
 
   if(0 == pushArg->mType) {
-    Sid_t sid;
+    Event_Sid_t sid;
     sid.mKey = eventArg->getSessionManager()->allocKey(&sid.mSeq);
     assert(sid.mKey > 0);
 
@@ -247,9 +247,9 @@ void Dispatcher :: timer(void * arg)
   TimerHandler * handler = pushArg->mTimerHandler;
   EventArg * eventArg = pushArg->mEventArg;
 
-  Sid_t sid;
-  sid.mKey = Sid_t::eTimerKey;
-  sid.mSeq = Sid_t::eTimerSeq;
+  Event_Sid_t sid;
+  sid.mKey = Event_Sid_t::eTimerKey;
+  sid.mSeq = Event_Sid_t::eTimerSeq;
   Response * response = new Response( sid );
   if(0 == handler->handle(response, &(pushArg->mTimeout))) {
     msgqueue_push((struct event_msgqueue*)pushArg->mPushQueue, arg);

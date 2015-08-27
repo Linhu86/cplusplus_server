@@ -32,17 +32,17 @@ int SidList :: getCount() const
   return mList->getCount();
 }
 
-void SidList :: add(Sid_t sid)
+void SidList :: add(Resonse_Sid_t sid)
 {
-  Sid_t * p = (Sid_t*)malloc(sizeof(Sid_t));
+  Resonse_Sid_t * p = (Resonse_Sid_t*)malloc(sizeof(Resonse_Sid_t));
   *p = sid;
   mList->append(p);
 }
 
-Sid_t SidList :: get(int index) const
+Resonse_Sid_t SidList :: get(int index) const
 {
-  Sid_t ret = { 0, 0 };
-  Sid_t * p = (Sid_t*)mList->getItem(index);
+  Resonse_Sid_t ret = { 0, 0 };
+  Resonse_Sid_t * p = (Resonse_Sid_t*)mList->getItem(index);
 
   if(NULL != p) 
     ret = *p;
@@ -50,9 +50,9 @@ Sid_t SidList :: get(int index) const
   return ret;
 }
 
-Sid_t SidList :: take(int index)
+Resonse_Sid_t SidList :: take(int index)
 {
-  Sid_t ret = get(index);
+  Resonse_Sid_t ret = get(index);
   void * p = mList->takeItem(index);
 
   if( NULL != p ) 
@@ -61,10 +61,10 @@ Sid_t SidList :: take(int index)
   return ret;
 }
 
-int SidList :: find(Sid_t sid) const
+int SidList :: find(Resonse_Sid_t sid) const
 {
   for(int i = 0; i < mList->getCount(); i++) {
-    Sid_t * p = (Sid_t*)mList->getItem(i);
+    Resonse_Sid_t * p = (Resonse_Sid_t*)mList->getItem(i);
 
   if(p->mKey == sid.mKey && p->mSeq == sid.mSeq) 
     return i;
@@ -193,7 +193,7 @@ int Message :: getCompletionKey()
 
 //-------------------------------------------------------------------
 
-Response :: Response(Sid_t fromSid)
+Response :: Response(Resonse_Sid_t fromSid)
 {
   mFromSid = fromSid;
   mReply = NULL;
@@ -217,7 +217,7 @@ Response :: ~Response()
   mToCloseList = NULL;
 }
 
-Sid_t Response :: getFromSid() const
+Resonse_Sid_t Response :: getFromSid() const
 {
   return mFromSid;
 }
